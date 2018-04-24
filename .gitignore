@@ -3,3 +3,5 @@ nohup.out
 .DS_Store
 
 .idea
+
+*.rdb
