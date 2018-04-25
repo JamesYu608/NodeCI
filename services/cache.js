@@ -18,8 +18,10 @@ mongoose.Query.prototype.exec = async function () { // 需要this指向Query，�
   // If we do, return that
   if (cacheValue) {
     console.log('From cache')
-
-    return JSON.parse(cacheValue)
+    const doc = JSON.parse(cacheValue)
+    return Array.isArray(doc)
+      ? doc.map(d => new this.model(d))
+      : new this.model(doc)
   }
 
   // Otherwise, issue the query and store the result in redis
