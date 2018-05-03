@@ -18,3 +18,12 @@ test('the header has the correct text', async () => {
   const text = await page.$eval('a.brand-logo', el => el.innerHTML)
   expect(text).toEqual('Blogster')
 })
+
+test('clicking login starts oauth flow', async () => {
+  await page.click('.right a')
+
+  const url = await page.url() // 取得當前page的url
+
+  // https://accounts.google.com/o/oauth2/...
+  expect(url).toMatch(/accounts\.google\.com/)
+})
