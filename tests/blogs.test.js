@@ -23,6 +23,32 @@ describe('When logged in', async () => {
     expect(label).toEqual('Blog Title')
   })
 
+  // Asserting Validation Success
+  describe('And using valid inputs', async () => {
+    beforeEach(async () => {
+      // entering our text then click submit
+      await page.type('.title input', 'My Title')
+      await page.type('.content input', 'My Content')
+      await page.click('form button')
+    })
+
+    test('Submitting takes user to review screen', async () => {
+      const text = await page.getContentsOf('h5')
+      expect(text).toEqual('Please confirm your entries')
+    })
+
+    test('Submitting then saving adds blog to index page', async () => {
+      await page.click('button.green')
+      await page.waitFor('.card')
+
+      const title = await page.getContentsOf('.card-title')
+      const content = await page.getContentsOf('p')
+      expect(title).toEqual('My Title')
+      expect(content).toEqual('My Content')
+
+    })
+  })
+
   // Asserting Validation Errors
   describe('And using invalid inputs', async () => {
     beforeEach(async () => {
