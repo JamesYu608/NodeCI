@@ -40,6 +40,31 @@ class CustomPage {
   async getContentsOf (selector) {
     return this.page.$eval(selector, el => el.innerHTML)
   }
+
+  get (path) {
+    return this.page.evaluate((_path) => { // 2. 避免跟上面的path混淆
+      return fetch(_path, { // 3. 使用
+        method: 'GET',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(res => res.json())
+    }, path) // 1. 注意這邊path要用args的方式傳入evaluate，否則真正在執行時會找不到
+  }
+
+  post (path, data) {
+    return this.page.evaluate((_path, _data) => {
+      return fetch(_path, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(_data)
+      }).then(res => res.json())
+    }, path, data)
+  }
 }
 
 module.exports = CustomPage
