@@ -1,0 +1,20 @@
+language: node_js
+node_js:
+  - "8" # NodeJS的版本
+dist: trusty # VM: 一個Ubuntu的lightweight版本
+services:
+  - mongodb
+  - redis-server
+env:
+  - NODE_ENV=ci PORT=3000 # config/keys.js: process.env.NODE_ENV / index.js: process.env.PORT
+cache: # for future build
+  directories:
+    - node_modules # we will still run npm install anyway
+    - client/node_modules
+install:
+  - npm install
+  - npm run build # for CI / production mode (build React JS files)
+script:
+  - nohup npm run start &
+  - sleep 3 # wait for server
+  - npm run test
