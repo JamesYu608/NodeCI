@@ -14,9 +14,17 @@ export const handleToken = token => async dispatch => {
 };
 
 export const submitBlog = (values, history) => async dispatch => {
+  // [Image upload code]
+  // Issue GET request to backend API to request a presigned URL
+  // Use the presigned URL to upload the file to AWS S3
+
+  // [Original code]
+  // Issue POST request to backend API to create a blog post
   const res = await axios.post('/api/blogs', values);
 
+  // Navigate the user back to the list of blogs
   history.push('/blogs');
+  // Tell the Redux side of the app about the new blog post that was created
   dispatch({ type: FETCH_BLOG, payload: res.data });
 };
 

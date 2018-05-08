@@ -5,3 +5,5 @@ nohup.out
 .idea
 
 *.rdb
+
+dev.js
