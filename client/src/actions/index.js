@@ -14,10 +14,11 @@ export const handleToken = token => async dispatch => {
 };
 
 export const submitBlog = (values, file, history) => async dispatch => {
+  let uploadConfig
   // [Image upload code]
   if (file) {
     // Issue GET request to backend API to request a presigned URL
-    const uploadConfig = await axios.get('/api/upload')
+    uploadConfig = await axios.get('/api/upload')
 
     // Use the presigned URL to upload the file to AWS S3
     await axios.put(uploadConfig.data.url, file, {
@@ -29,7 +30,10 @@ export const submitBlog = (values, file, history) => async dispatch => {
 
   // [Original code]
   // Issue POST request to backend API to create a blog post
-  const res = await axios.post('/api/blogs', values);
+  const res = await axios.post('/api/blogs', {
+    ...values,
+    imageUrl: uploadConfig ? uploadConfig.data.key : ''
+  });
 
   // Navigate the user back to the list of blogs
   history.push('/blogs');
